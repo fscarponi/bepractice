@@ -7,6 +7,7 @@ import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.routing.*
+import org.koin.ktor.plugin.Koin
 import org.slf4j.event.Level
 
 fun main() {
@@ -21,6 +22,15 @@ fun Application.module() {
     installRoutes()
     install(CallLogging) {
         level = Level.DEBUG
+    }
+    install(Koin) {
+        modules(
+            listOf(
+                DIModules.environment,
+                DIModules.database,
+                DIModules.serialization
+            )
+        )
     }
 }
 
@@ -39,7 +49,7 @@ fun Application.setHttp() {
     }
 }
 
-fun Application.installRoutes(){
+fun Application.installRoutes() {
     //list of route
     routing {
         basicApi()

@@ -1,50 +1,70 @@
 import com.mongodb.reactivestreams.client.MongoClient
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import org.kodein.di.*
+import org.koin.dsl.module
 import org.litote.kmongo.coroutine.CoroutineClient
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.coroutine.coroutine
+import org.litote.kmongo.reactivestreams.KMongo
 
 object DIModules  {
 
     val environment
-        get() = DI.Module("environment") {
-            environmentBoolean("PRODUCTION", default = false)
-            environmentString("MONGO_URL", default = "192.168.1.219:27017") { it.prependIfMissing("mongodb://") }
-            bind<String>("DATABASE_NAME") with singleton {
-                if (instanceOrNull<Boolean>("PRODUCTION") == true) "production" else "test"
+        get() = module {
+            single {
+                DBParameters(
+                    production = environmentBoolean("PRODUCTION", default = false),
+                    mongoUrl = environmentString(
+                        "MONGO_URL",
+                        default = "mongodb://127.0.0.1:27017"
+                    ) { it.prependIfMissing("mongodb://") },
+                    databaseName = if (environmentBoolean("PRODUCTION", default = false)) "db" else "testDB"
+                )
             }
         }
+
     @OptIn(ExperimentalSerializationApi::class)
     val serialization
-        get() = DI.Module("serialization") {
-            bind<Json>() with singleton {
+        get() = module {
+            single<Json>() {
+                val dbParameters: DBParameters by inject()
                 Json(from = Json.Default) {
-                    serializersModule = instance()
-                    prettyPrint = instance<Boolean>("PRODUCTION").not()
-                    if (instance<Boolean>("PRODUCTION").not())
+                    prettyPrint = !dbParameters.production
+                    if (!dbParameters.production)
                         prettyPrintIndent = "  "
                     encodeDefaults = true
                 }
             }
         }
 
-    val database get()= DI.Module("database") {
-        bind<CoroutineClient>() with provider { instance<MongoClient>().coroutine }
-        bind<CoroutineDatabase>() with singleton {
-            instance<MongoClient>().getDatabase(instance("DATABASE_NAME")).coroutine
-        }
+    val database
+        get() = module {
+            single {
+                val dbParameters: DBParameters by inject()
+                KMongo.createClient(dbParameters.mongoUrl)
+            }
+            factory<CoroutineClient> { get<MongoClient>().coroutine }
+            factory {
+                val dbParameters: DBParameters by inject()
+                get<MongoClient>().getDatabase(dbParameters.databaseName).coroutine
+            }
 
-        bind<TransactionContext>() with provider {
-            TransactionContext(di)
-        }
+            single {
+                TransactionContext()
+            }
 
-        //direct access to collections --> warning no transaction and collection name is bind!
-        bind<CoroutineCollection<User>>() with singleton {
-            instance<CoroutineDatabase>().getCollection("users")
+            //direct access to collections --> warning no transaction and collection name is bind!
+            single<CoroutineCollection<User>> {
+                get<CoroutineDatabase>().getCollection("users")
+            }
         }
-    }
 }
+
+
+data class DBParameters(
+    val production: Boolean,
+    val mongoUrl: String,
+    val databaseName: String
+)
 

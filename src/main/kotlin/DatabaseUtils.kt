@@ -1,21 +1,17 @@
-import io.ktor.server.application.*
-import io.ktor.util.pipeline.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.kodein.di.DI
-import org.kodein.di.DIAware
-import org.kodein.di.direct
-import org.kodein.di.instance
-import org.kodein.di.ktor.closestDI
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.litote.kmongo.coroutine.CoroutineClient
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 
-data class TransactionContext(override val di: DI) : DIAware {
+class TransactionContext : KoinComponent {
 
-    val client: CoroutineClient by instance()
+    val client: CoroutineClient by inject()
+    private val dbParameters: DBParameters by inject()
     private val db
-        get() = client.getDatabase(direct.instance("DATABASE_NAME"))
+        get() = client.getDatabase(dbParameters.databaseName)
 
     //Users
     val usersCollection: CoroutineCollection<User> by lazy { db.getCollection("users") }
@@ -38,8 +34,6 @@ suspend inline fun <R> TransactionContext.transaction(
             client.close()
         }
 }
-suspend inline fun <T> PipelineContext<Unit, ApplicationCall>.databaseTransaction(
-    closeClient: Boolean = true,
-    action: TransactionContext.() -> T
-) =
-    closestDI().direct.instance<TransactionContext>().transaction(closeClient, action)
+
+
+

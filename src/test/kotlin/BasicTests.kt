@@ -6,6 +6,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Test
+import org.koin.core.context.GlobalContext.startKoin
 import java.time.LocalDateTime
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -13,13 +14,23 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class ApplicationTest {
-    @BeforeTest @AfterTest
-    fun clearBeforeTest(){
-        clearDatabase()
-        //other cleaning operation todo
+    @BeforeTest
+    fun startDI() {
+        startKoin {
+            // declare used modules
+            modules(listOf(DIModules.environment, DIModules.database, DIModules.serialization))
+        }
     }
 
-    private fun clearDatabase(){
+    @BeforeTest
+    @AfterTest
+    fun clearBeforeTest() {
+        clearDatabase()
+        //other cleaning operation todo
+
+    }
+
+    private fun clearDatabase() {
         //remove user created for tests
         println("zzz..zz.. db cleared! ${LocalDateTime.now()}")
     }

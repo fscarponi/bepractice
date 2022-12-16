@@ -21,7 +21,8 @@ val ktorVersion: String by project
 val logbackVersion: String by project
 val kotlinVersion: String by project
 val kotlinxSerializationVersion: String by project
-val kodeinVersion: String by project
+val koinVersion: String by project
+val koinKtorVersion: String by project
 
 dependencies {
     //coroutines
@@ -43,8 +44,10 @@ dependencies {
     implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
 
     //DI
-    implementation("org.kodein.di:kodein-di-jvm:$kodeinVersion")
-    implementation("org.kodein.di:kodein-di-framework-ktor-server-jvm:$kodeinVersion")
+    // Koin for Ktor
+    implementation("io.insert-koin:koin-ktor:$koinKtorVersion")
+    // SLF4J Logger
+    implementation("io.insert-koin:koin-logger-slf4j:$koinKtorVersion")
 
 
     //tests
