@@ -16,14 +16,21 @@ repositories {
     maven("https://maven.pkg.jetbrains.space/public/p/ktor/eap")//access to eap for 2.2.1
 
 }
+val kmongoVersion: String by project
 val ktorVersion: String by project
 val logbackVersion: String by project
 val kotlinVersion: String by project
 val kotlinxSerializationVersion: String by project
+val kodeinVersion: String by project
 
 dependencies {
     //coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+
+    //kmongo
+    implementation("org.litote.kmongo:kmongo-async:$kmongoVersion")
+    implementation("org.litote.kmongo:kmongo-coroutine:$kmongoVersion")
+
 
     //ktor
     implementation("io.ktor:ktor-server-core-jvm:$ktorVersion")
@@ -33,6 +40,12 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktorVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
+    implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
+
+    //DI
+    implementation("org.kodein.di:kodein-di-jvm:$kodeinVersion")
+    implementation("org.kodein.di:kodein-di-framework-ktor-server-jvm:$kodeinVersion")
+
 
     //tests
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")

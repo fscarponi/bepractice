@@ -50,6 +50,7 @@ An example JSON response body could be:
   }
 ]``
 
+
 - Endpoint 4: 
 Endpoint that accepts a POST request with a JSON payload that represents a tree data structure. The endpoint should return the maximum depth of the tree in the response. To solve this challenge, you will need to implement a recursive function that traverses the tree and calculates its maximum depth.
 an example JSON could be:
@@ -79,6 +80,16 @@ an example JSON response body for this request could be:
 ``{
    "max_depth": 3
 }``
+
+## HTTP PROTOCOL
+| Route          | Type | Parameters                          | Request Body                        | Response Body                                             | Successful HTTPCode | Failure HTTPCode            |
+|----------------|------|-------------------------------------|-------------------------------------|-----------------------------------------------------------|-----------------------------|---------------------|
+| /welcome       | GET  |                                     | `json{ "message": "Hello, world!"}` | `json{ "response": "This is a simple message."}`          | 200                 | 400..499                    |
+| /user/register | POST |                                     | `UserJSON{...}`                     | `json{ "success": True, message="Registration successful"}` | 200                 | 400..499                    |
+| /user/query    | GET  |                                     | `json{ "message": "Hello, world!"}` | `json{ "response": "This is a simple message."}`          | 200                 | 400..499                    |
+| /depth   | POST |                                     | `BinaryTreeJSON{...}`               | `json{ "maxdepth": 3}`                                    | 200                 | 400..499                    |
+
+
 
 
 ## Development
