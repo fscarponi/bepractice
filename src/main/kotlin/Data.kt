@@ -38,7 +38,10 @@ data class UserRegistrationRequest(
     }
 }
 
-
+@Serializable
+data class UserQueryResponse(
+    val results: List<User> = emptyList()
+)
 
 
 

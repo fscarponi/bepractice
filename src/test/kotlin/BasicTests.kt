@@ -49,6 +49,16 @@ class ApplicationTest {
         println("zzz..zz.. db cleared! ${LocalDateTime.now()}")
     }
 
+    private fun loadTestsUserOnDB() {
+        val client = KMongo.createClient().coroutine
+        val database = client.getDatabase("testDB")
+        runBlocking {
+            database.getCollection<User>("users").insertMany(
+                Samples.users
+            )
+        }
+    }
+
 
     @Test
     fun dummyTest() {
@@ -127,32 +137,55 @@ class ApplicationTest {
     }
 
     @Test
-    fun testQuerySuccess() = testApplication {
+    fun testQuerySuccessEasy() = testApplication {
         //clear db before test
-
         application {
             configureSerialization()
             setHttp()
             installRoutes()
         }
+        loadTestsUserOnDB()
+
         client.get("/user/query") {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
             setBody(Json.encodeToString("todo"))
+            url {
+                parameters.append("firstname", "jhon")
+            }
         }.let {
-            //todo
+            val results = Json.decodeFromString<UserQueryResponse>(it.bodyAsText()).results
+            assertEquals(HttpStatusCode.OK, it.status)
+            assertEquals(2, results.size)
+        }
+    }
+
+    @Test
+    fun testQuerySuccessMedium() = testApplication {
+        //clear db before test
+        application {
+            configureSerialization()
+            setHttp()
+            installRoutes()
+        }
+        loadTestsUserOnDB()
+
+        client.get("/user/query") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            setBody(Json.encodeToString("todo"))
+            url {
+                parameters.append("username", "jhondoe")
+                parameters.append("firstName", "Jhon")
+            }
+        }.let {
+            val results = Json.decodeFromString<UserQueryResponse>(it.bodyAsText()).results
+            assertEquals(HttpStatusCode.OK, it.status)
+            assertEquals(1, results.size)
         }
     }
 
     @Test
     fun testQueryFail() = testApplication {
         //clear db before test
-        val badUser = UserRegistrationRequest(
-            "username2",
-            "password123",
-            "Jhon",
-            "Doe",
-            "abc"//invalid email
-        )
         application {
             configureSerialization()
             setHttp()
@@ -160,13 +193,14 @@ class ApplicationTest {
         }
         client.get("/user/query") {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
-            setBody(Json.encodeToString(badUser))
+            setBody(Json.encodeToString(TextResponse("bad body")))
         }.let {
             assertEquals(
                 HttpStatusCode.BadRequest,
                 it.status
             )
         }
+
     }
 
 
