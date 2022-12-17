@@ -55,7 +55,6 @@ fun Route.dbApi() = route("user") {
             .filter { it.second != null }
             .map { it.first to it.second!! }//without it hint will fail to infer the not nullability
             .toList()
-//        println("--> parameters filtered = $parametersString")
         if (parametersString.isEmpty()) {
             call.respond(HttpStatusCode.BadRequest, "Expected arguments")
             return@get
@@ -65,7 +64,6 @@ fun Route.dbApi() = route("user") {
                 append(it.first, it.second)
             }
         }
-//        println("filter= $filter")
         transactionContext.transaction {
             usersCollection.find(filter).limit(20).toList()
         }.let {
@@ -79,8 +77,9 @@ fun Route.dbApi() = route("user") {
 
 fun Route.servicesApi() {
 
-    get("depth") {
-        error("not yet implemented")
+    post("depth") {
+        val node = call.receive<Node>()
+        call.respond(HttpStatusCode.OK, DepthReponse(getDepth(node)))
     }
 
 }
