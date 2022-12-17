@@ -44,4 +44,26 @@ data class UserQueryResponse(
 )
 
 
+@Serializable
+data class Node(
+    val value: String,
+    val leftChild: Node? = null,
+    val rightChild: Node? = null
+)
+
+
+fun getDepth(node: Node, startDeep: Int = 0): Int {
+    val currentDepth = startDeep + 1
+
+    val maxLeftDepth = node.leftChild?.let {
+        getDepth(it, currentDepth)
+    } ?: currentDepth
+
+    val maxRightDepth = node.rightChild?.let {
+        getDepth(it, currentDepth)
+    } ?: currentDepth
+
+    return maxOf(maxLeftDepth, maxRightDepth)
+}
+
 

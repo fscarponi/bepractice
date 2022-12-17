@@ -19,7 +19,6 @@ fun Route.basicApi() {
     }
 }
 
-
 fun Route.dbApi() = route("user") {
 
     val transactionContext by inject<TransactionContext>()
@@ -32,7 +31,7 @@ fun Route.dbApi() = route("user") {
             }
         }
         transactionContext.transaction {
-            //we are asserting that user and authUser collections are synced
+            //WARNING we are assuming that user and authUser collections are synced
             usersCollection.findOne(
                 or(User::username eq userRequest.username, User::mail eq userRequest.mail)
             )?.let {
@@ -54,9 +53,9 @@ fun Route.dbApi() = route("user") {
         val parametersString = call.request.queryParameters.entries()
             .map { it.key to it.value.firstOrNull() }
             .filter { it.second != null }
-            .map { it.first to it.second!! }
+            .map { it.first to it.second!! }//without it hint will fail to infer the not nullability
             .toList()
-        println("--> parameters filtered = $parametersString")
+//        println("--> parameters filtered = $parametersString")
         if (parametersString.isEmpty()) {
             call.respond(HttpStatusCode.BadRequest, "Expected arguments")
             return@get
@@ -66,7 +65,7 @@ fun Route.dbApi() = route("user") {
                 append(it.first, it.second)
             }
         }
-        println("filter= $filter")
+//        println("filter= $filter")
         transactionContext.transaction {
             usersCollection.find(filter).limit(20).toList()
         }.let {
