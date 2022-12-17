@@ -43,6 +43,10 @@ data class UserQueryResponse(
     val results: List<User> = emptyList()
 )
 
+@Serializable
+data class DepthReponse(
+    val maxDepth: Int
+)
 
 @Serializable
 data class Node(

@@ -1,0 +1,15 @@
+{
+  "value": "a",
+  "leftChild": {
+    "value": "b",
+    "rightChild": {
+      "value": "c",
+      "rightChild": {
+        "value": "d"
+      }
+    }
+  },
+  "rightChild": {
+    "value": "f"
+  }
+}

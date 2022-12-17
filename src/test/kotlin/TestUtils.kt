@@ -46,4 +46,42 @@ object Samples {
             mail = "mail@username5.com"
         )
     )
+
+    val lvl4Tree = Node(
+        value = "a",
+        leftChild = Node(
+            value = "b",
+            leftChild = null,
+            rightChild = Node(
+                value = "c",
+                leftChild = null,
+                rightChild = Node(
+                    value = "d",
+                    leftChild = null,
+                    rightChild = null
+                )
+            )
+        ),
+        rightChild = Node(
+            value = "f",
+            leftChild = null,
+            rightChild = null
+        )
+    )
+
+    val lvl1tree = Node(
+        value = "a",
+        null,
+        null
+    )
+
+    val lvl2tree = Node(
+        value = "a",
+        Node(
+            value = "b",
+            null,
+            null
+        ),
+        null
+    )
 }
