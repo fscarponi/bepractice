@@ -1,3 +1,6 @@
+[![Build CI](https://github.com/fscarponi/bepractice/actions/workflows/push_ci.yml/badge.svg)](https://github.com/fscarponi/bepractice/actions/workflows/push_ci.yml)
+
+
 # Let's Practice
 ## Personal challenge
 
