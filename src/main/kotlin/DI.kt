@@ -34,6 +34,7 @@ object DIModules  {
                     if (!dbParameters.production)
                         prettyPrintIndent = "  "
                     encodeDefaults = true
+
                 }
             }
         }

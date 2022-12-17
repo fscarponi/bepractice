@@ -15,6 +15,7 @@ class TransactionContext : KoinComponent {
 
     //Users
     val usersCollection: CoroutineCollection<User> by lazy { db.getCollection("users") }
+    val usersAuthCollection: CoroutineCollection<UserAuth> by lazy { db.getCollection("authUserInfo") }
 
 }
 

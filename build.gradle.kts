@@ -1,8 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.22"
-    kotlin("plugin.serialization") version "1.7.22"
+    kotlin("jvm") version "1.7.21"
+    kotlin("plugin.serialization") version "1.7.21"
 
     application
 }
@@ -31,6 +31,7 @@ dependencies {
     //kmongo
     implementation("org.litote.kmongo:kmongo-async:$kmongoVersion")
     implementation("org.litote.kmongo:kmongo-coroutine:$kmongoVersion")
+    implementation("org.litote.kmongo:kmongo-id-serialization:$kmongoVersion")
 
 
     //ktor
@@ -56,6 +57,10 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.1")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.1")
     testImplementation(kotlin("test-junit5"))
+}
+
+configurations.all {
+    resolutionStrategy.force("org.jetbrains.kotlin:kotlin-test-junit5:1.7.21")
 }
 
 tasks.withType<Test> {
