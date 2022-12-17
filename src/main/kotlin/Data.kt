@@ -1,4 +1,3 @@
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
@@ -19,7 +18,8 @@ data class UserAuth(
     val _id: String,
     val username: String,
     val hashPassword: String,
-    @Contextual val signupDate: LocalDateTime
+    @Serializable(with = LocalDateTimeSerializer::class)
+    val signupDate: LocalDateTime
 )
 
 
