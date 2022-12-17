@@ -82,12 +82,12 @@ an example JSON response body for this request could be:
 }``
 
 ## HTTP PROTOCOL
-| Route          | Type | Parameters                          | Request Body                        | Response Body                                             | Successful HTTPCode | Failure HTTPCode            |
-|----------------|------|-------------------------------------|-------------------------------------|-----------------------------------------------------------|-----------------------------|---------------------|
-| /welcome       | GET  |                                     | `json{ "message": "Hello, world!"}` | `json{ "response": "This is a simple message."}`          | 200                 | 400..499                    |
-| /user/register | POST |                                     | `UserJSON{...}`                     | `json{ "success": True, message="Registration successful"}` | 200                 | 400..499                    |
-| /user/query    | GET  |                                     | `json{ "message": "Hello, world!"}` | `json{ "response": "This is a simple message."}`          | 200                 | 400..499                    |
-| /depth   | POST |                                     | `BinaryTreeJSON{...}`               | `json{ "maxdepth": 3}`                                    | 200                 | 400..499                    |
+| Route          | Type | Parameters                                            | Request Body                        | Response Body                                               | Successful HTTPCode | Failure HTTPCode |
+|----------------|------|-------------------------------------------------------|-------------------------------------|-------------------------------------------------------------|---------------------|------------------|
+| /welcome       | GET  |                                                       | `json{ "message": "Hello, world!"}` | `json{ "response": "This is a simple message."}`            | 200                 | 400..499         |
+| /user/register | POST |                                                       | `UserJSON{...}`                     | `json{ "success": True, message="Registration successful"}` | 200                 | 400..499         |
+| /user/query    | GET  | KV (attribName,valueToMatch) multi parameters support |                                     | `json{ "response": "This is a simple message."}`            | 200                 | 400..499         |
+| /depth         | POST |                                                       | `BinaryTreeJSON{...}`               | `json{ "maxdepth": 3}`                                      | 200                 | 400..499         |
 
 
 
