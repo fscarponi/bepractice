@@ -43,8 +43,8 @@ class ApplicationTest {
         runBlocking {
             val client = KMongo.createClient().coroutine
             val database = client.getDatabase("testDB")
-//            database.getCollection<User>("users").drop()
-//            database.getCollection<User>("authUserInfo").drop()
+            database.getCollection<User>("users").drop()
+            database.getCollection<User>("authUserInfo").drop()
         }
         println("zzz..zz.. db cleared! ${LocalDateTime.now()}")
     }
@@ -148,9 +148,8 @@ class ApplicationTest {
 
         client.get("/user/query") {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
-            setBody(Json.encodeToString("todo"))
             url {
-                parameters.append("firstname", "jhon")
+                parameters.append("firstName", "Jhon")
             }
         }.let {
             val results = Json.decodeFromString<UserQueryResponse>(it.bodyAsText()).results
@@ -200,7 +199,6 @@ class ApplicationTest {
                 it.status
             )
         }
-
     }
 
 

@@ -3,6 +3,8 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.bson.Document
+import org.bson.conversions.Bson
 import org.koin.ktor.ext.inject
 import org.litote.kmongo.eq
 import org.litote.kmongo.or
@@ -49,12 +51,28 @@ fun Route.dbApi() = route("user") {
 
 
     get("query") {
-        error("not yet implemented")
-    }
+        val parametersString = call.request.queryParameters.entries()
+            .map { it.key to it.value.firstOrNull() }
+            .filter { it.second != null }
+            .map { it.first to it.second!! }
+            .toList()
+        println("--> parameters filtered = $parametersString")
+        if (parametersString.isEmpty()) {
+            call.respond(HttpStatusCode.BadRequest, "Expected arguments")
+            return@get
+        }
+        val filter: Bson = Document().apply {
+            parametersString.forEach {
+                append(it.first, it.second)
+            }
+        }
+        println("filter= $filter")
+        transactionContext.transaction {
+            usersCollection.find(filter).limit(20).toList()
+        }.let {
+            call.respond(HttpStatusCode.OK, UserQueryResponse(it))
+        }
 
-
-    post("query") {
-        error("not yet implemented")
     }
 
 }

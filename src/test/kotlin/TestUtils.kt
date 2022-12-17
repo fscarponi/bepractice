@@ -41,7 +41,7 @@ object Samples {
         User(
             UUID.randomUUID().toString(),
             "username5",
-            "firstName5",
+            "Jhon",
             lastName = "lastName5",
             mail = "mail@username5.com"
         )
