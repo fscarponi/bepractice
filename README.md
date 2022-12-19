@@ -101,9 +101,29 @@ an example JSON response body for this request could be:
 - Database will be implementented on MongoDB with Kmongo as copilot and hosted in a docker container (see guide below)
 - if enought time some git-actions will be integrated!
 
-## Docker GUIDE for backend deploy
-TODO 
-(docker is hosted on a rasperry-py 3b so not all containers image will work fine... )
+## Docker GUIDE for backend deploy (updated)
+WARNING:
+raspberry-py 3b with arm7v (32 bit) is not supported for mongo db, i found a partially working image (larsla/docker-mongo-armv7l), but the replicaset does not work as expected, so transaction context will throw!
+
+for any other system (es. rasp 4+ or classic non-arm architecture) any mongo image will work good. Remember to run rs.initiate() for start replica set.
+
+es. docker_compose
+````
+mongo:
+    image: mongo
+    expose:
+      - 27017
+    ports:
+      - 27017:27017
+    restart: always
+    command: --replSet rs0 --bind_ip_all
+    volumes:
+      - ../DB/localMongoData/db:/data/db
+    healthcheck:
+      test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo -u $${MONGO_INITDB_ROOT_USERNAME} -p $${MONGO_INITDB_ROOT_PASSWORD} --quiet) -eq 1
+      interval: 10s
+ ````
+
 
 ## License
 MIT
