@@ -53,6 +53,7 @@ An example JSON response body could be:
   }
 ]``
 
+Note: sending the full query to execute is SQL-Injection prone, so this endpoint will be refactored for receiving all pair <attribute, valueToMatch> in query parameters.
 
 - Endpoint 4: 
 Endpoint that accepts a POST request with a JSON payload that represents a tree data structure. The endpoint should return the maximum depth of the tree in the response. To solve this challenge, you will need to implement a recursive function that traverses the tree and calculates its maximum depth.
