@@ -16,5 +16,12 @@ jobs:
           java-version: 11
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.8.0
+        with:
+          mongodb-version: '6.0'
+          mongodb-replica-set: test-rs
+          mongodb-port: 27017
       - name: Build with Gradle
-        run: ./gradlew assemble
+        run: ./gradlew build
+
