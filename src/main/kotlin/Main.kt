@@ -10,6 +10,7 @@ import io.ktor.server.routing.*
 import org.koin.ktor.plugin.Koin
 import org.slf4j.event.Level
 
+
 fun main() {
     println("Starting server!")
     embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module)

@@ -87,4 +87,10 @@ class BasicTestsTrees {
         }
     }
 
+
+    @Test
+    fun testDeepComplexTree() = testApplication {
+
+    }
+
 }
