@@ -22,10 +22,9 @@ object DIModules  {
             }
         }
 
-    @OptIn(ExperimentalSerializationApi::class)
     val serialization
         get() = module {
-            single<Json>() {
+            single {
                 val dbParameters: DBParameters by inject()
                 Json(from = Json.Default) {
                     prettyPrint = !dbParameters.production
@@ -43,14 +42,10 @@ object DIModules  {
                 val dbParameters: DBParameters by inject()
                 KMongo.createClient(dbParameters.mongoUrl)
             }
-            factory<CoroutineClient> { get<MongoClient>().coroutine }
+            single { get<MongoClient>().coroutine }
             factory {
                 val dbParameters: DBParameters by inject()
                 get<MongoClient>().getDatabase(dbParameters.databaseName).coroutine
-            }
-
-            single {
-                TransactionContext()
             }
 
             //direct access to collections --> warning no transaction and collection name is bind!

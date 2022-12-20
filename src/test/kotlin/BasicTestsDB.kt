@@ -197,9 +197,20 @@ class ApplicationTest {
     fun testQuerySuccessMedium() = testApplication {
         //clear db before test
         application {
-            configureSerialization()
-            setHttp()
-            installRoutes()
+            install(ContentNegotiation) {
+                json()
+            }
+            install(CORS) {
+                allowHeader(HttpHeaders.Authorization)
+                allowHeader(HttpHeaders.ContentType)
+                anyHost() // @TODO: REMOVE IN PROD!!
+            }
+            //list of route
+            routing {
+                basicApi()
+                dbApi()
+                servicesApi()
+            }
         }
         loadTestsUserOnDB()
 
@@ -221,9 +232,20 @@ class ApplicationTest {
     fun testQueryFail() = testApplication {
         //clear db before test
         application {
-            configureSerialization()
-            setHttp()
-            installRoutes()
+            install(ContentNegotiation) {
+                json()
+            }
+            install(CORS) {
+                allowHeader(HttpHeaders.Authorization)
+                allowHeader(HttpHeaders.ContentType)
+                anyHost() // @TODO: REMOVE IN PROD!!
+            }
+            //list of route
+            routing {
+                basicApi()
+                dbApi()
+                servicesApi()
+            }
         }
         client.get("/user/query") {
             header(HttpHeaders.ContentType, ContentType.Application.Json)

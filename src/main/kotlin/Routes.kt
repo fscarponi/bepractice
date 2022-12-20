@@ -79,12 +79,14 @@ fun Route.dbApi() = route("user") {
                 append(it.first, it.second)
             }
         }
-        transactionContext.transaction {
-            usersCollection.find(filter).limit(20).toList()
-        }.let {
-            call.respond(HttpStatusCode.OK, UserQueryResponse(it))
-        }
-
+        userAuthCollection.find(filter)
+            .limit(10)
+            .toFlow()
+            .map { UserResponse(it.username, it.mail, it.firstName, it.lastName) }
+            .toList()
+            .let {
+                call.respond(HttpStatusCode.OK, UserQueryResponse(it))
+            }
     }
 
 }

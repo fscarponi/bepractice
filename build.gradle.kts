@@ -16,6 +16,15 @@ repositories {
     maven("https://maven.pkg.jetbrains.space/public/p/ktor/eap")//access to eap for 2.2.1
 
 }
+
+kotlin {
+    sourceSets {
+        all {
+            languageSettings.optIn("kotlinx.serialization.ExperimentalSerializationApi")
+        }
+    }
+}
+
 val kmongoVersion: String by project
 val ktorVersion: String by project
 val logbackVersion: String by project
@@ -36,7 +45,7 @@ dependencies {
 
     //ktor
     implementation("io.ktor:ktor-server-core-jvm:$ktorVersion")
-    implementation("io.ktor:ktor-server-netty-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-cio-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-cors-jvm:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktorVersion")
@@ -59,8 +68,12 @@ dependencies {
     testImplementation(kotlin("test-junit5"))
 }
 
-configurations.all {
-    resolutionStrategy.force("org.jetbrains.kotlin:kotlin-test-junit5:1.7.21")
+configurations {
+    all {
+        resolutionStrategy {
+            force("org.jetbrains.kotlin:kotlin-test-junit5:1.7.21")
+        }
+    }
 }
 
 tasks.withType<Test> {

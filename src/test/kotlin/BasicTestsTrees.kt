@@ -1,6 +1,11 @@
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
+import io.ktor.server.application.*
+import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.cors.routing.*
+import io.ktor.server.routing.*
 import io.ktor.server.testing.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -22,9 +27,20 @@ class BasicTestsTrees {
     @Test
     fun testDeepTree1() = testApplication {
         application {
-            configureSerialization()
-            setHttp()
-            installRoutes()
+            install(ContentNegotiation) {
+                json()
+            }
+            install(CORS) {
+                allowHeader(HttpHeaders.Authorization)
+                allowHeader(HttpHeaders.ContentType)
+                anyHost() // @TODO: REMOVE IN PROD!!
+            }
+            //list of route
+            routing {
+                basicApi()
+                dbApi()
+                servicesApi()
+            }
         }
         val bodyJson = File(classLoader.getResource("treeMock1.json").file).readText()
         client.post("/depth") {
@@ -39,9 +55,20 @@ class BasicTestsTrees {
     @Test
     fun testDeepTree2() = testApplication {
         application {
-            configureSerialization()
-            setHttp()
-            installRoutes()
+            install(ContentNegotiation) {
+                json()
+            }
+            install(CORS) {
+                allowHeader(HttpHeaders.Authorization)
+                allowHeader(HttpHeaders.ContentType)
+                anyHost() // @TODO: REMOVE IN PROD!!
+            }
+            //list of route
+            routing {
+                basicApi()
+                dbApi()
+                servicesApi()
+            }
         }
         val bodyJson = File(classLoader.getResource("treeMock2.json").file).readText()
         client.post("/depth") {
@@ -56,9 +83,20 @@ class BasicTestsTrees {
     @Test
     fun testDeepTree4() = testApplication {
         application {
-            configureSerialization()
-            setHttp()
-            installRoutes()
+            install(ContentNegotiation) {
+                json()
+            }
+            install(CORS) {
+                allowHeader(HttpHeaders.Authorization)
+                allowHeader(HttpHeaders.ContentType)
+                anyHost() // @TODO: REMOVE IN PROD!!
+            }
+            //list of route
+            routing {
+                basicApi()
+                dbApi()
+                servicesApi()
+            }
         }
         val bodyJson = File(classLoader.getResource("treeMock4.json").file).readText()
         client.post("/depth") {
@@ -73,9 +111,20 @@ class BasicTestsTrees {
     @Test
     fun testDeepTree4withNulls() = testApplication {
         application {
-            configureSerialization()
-            setHttp()
-            installRoutes()
+            install(ContentNegotiation) {
+                json()
+            }
+            install(CORS) {
+                allowHeader(HttpHeaders.Authorization)
+                allowHeader(HttpHeaders.ContentType)
+                anyHost() // @TODO: REMOVE IN PROD!!
+            }
+            //list of route
+            routing {
+                basicApi()
+                dbApi()
+                servicesApi()
+            }
         }
         val bodyJson = File(classLoader.getResource("treeMock4Explicit.json").file).readText()
         client.post("/depth") {

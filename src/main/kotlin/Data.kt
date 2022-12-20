@@ -9,12 +9,13 @@ data class TextResponse(val message: String)
 
 @Serializable
 data class UserAuth(
-    val _id: String,
     val username: String,
     val mail: String,
     val hashPassword: String,
     @Serializable(with = LocalDateTimeSerializer::class)
-    val signupDate: LocalDateTime
+    val signupDate: LocalDateTime,
+    val firstName: String,
+    val lastName: String,
 )
 
 
@@ -51,17 +52,28 @@ data class Node(
     val rightChild: Node? = null
 )
 
+@Serializable
+data class Node2(
+    val value: String,
+    val children: List<Node2>
+)
 
-fun getDepth(node: Node, startDeep: Int = 0): Int {
-    val currentDepth = startDeep + 1
+//this does not work on stack
+suspend fun Node2.getChildrenMaxDepth(currentDepth: Int = 0): Int = coroutineScope {
+    children.map { async { it.getChildrenMaxDepth(currentDepth + 1) } }.awaitAll().max()
+}
 
-    val maxLeftDepth = node.leftChild?.let {
-        getDepth(it, currentDepth)
-    } ?: currentDepth
+//this work on stack
+fun Node.getDepth(currentDepth: Int = 0): Int {
+    val nextDepth = currentDepth + 1
 
-    val maxRightDepth = node.rightChild?.let {
-        getDepth(it, currentDepth)
-    } ?: currentDepth
+    val maxLeftDepth = leftChild
+        ?.getDepth(nextDepth)
+        ?: nextDepth
+
+    val maxRightDepth = rightChild
+        ?.getDepth(nextDepth)
+        ?: nextDepth
 
     return maxOf(maxLeftDepth, maxRightDepth)
 }
