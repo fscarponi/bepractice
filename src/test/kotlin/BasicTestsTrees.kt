@@ -32,7 +32,7 @@ class BasicTestsTrees {
             setBody(bodyJson)
         }.let {
             assertEquals(HttpStatusCode.OK, it.status)
-            assertEquals(1, Json.decodeFromString<DepthReponse>(it.bodyAsText()).maxDepth)
+            assertEquals(1, Json.decodeFromString<DepthResponse>(it.bodyAsText()).maxDepth)
         }
     }
 
@@ -49,7 +49,7 @@ class BasicTestsTrees {
             setBody(bodyJson)
         }.let {
             assertEquals(HttpStatusCode.OK, it.status)
-            assertEquals(2, Json.decodeFromString<DepthReponse>(it.bodyAsText()).maxDepth)
+            assertEquals(2, Json.decodeFromString<DepthResponse>(it.bodyAsText()).maxDepth)
         }
     }
 
@@ -66,7 +66,7 @@ class BasicTestsTrees {
             setBody(bodyJson)
         }.let {
             assertEquals(HttpStatusCode.OK, it.status)
-            assertEquals(4, Json.decodeFromString<DepthReponse>(it.bodyAsText()).maxDepth)
+            assertEquals(4, Json.decodeFromString<DepthResponse>(it.bodyAsText()).maxDepth)
         }
     }
 
@@ -83,7 +83,7 @@ class BasicTestsTrees {
             setBody(bodyJson)
         }.let {
             assertEquals(HttpStatusCode.OK, it.status)
-            assertEquals(4, Json.decodeFromString<DepthReponse>(it.bodyAsText()).maxDepth)
+            assertEquals(4, Json.decodeFromString<DepthResponse>(it.bodyAsText()).maxDepth)
         }
     }
 

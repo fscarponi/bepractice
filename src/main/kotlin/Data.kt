@@ -1,3 +1,6 @@
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
@@ -5,18 +8,10 @@ import java.time.LocalDateTime
 data class TextResponse(val message: String)
 
 @Serializable
-data class User(
-    val _id: String,
-    val username: String,
-    val firstName: String,
-    val lastName: String,
-    val mail: String
-)
-
-@Serializable
 data class UserAuth(
     val _id: String,
     val username: String,
+    val mail: String,
     val hashPassword: String,
     @Serializable(with = LocalDateTimeSerializer::class)
     val signupDate: LocalDateTime
@@ -38,13 +33,14 @@ data class UserRegistrationRequest(
     }
 }
 
+
 @Serializable
 data class UserQueryResponse(
-    val results: List<User> = emptyList()
+    val results: List<UserResponse> = emptyList()
 )
 
 @Serializable
-data class DepthReponse(
+data class DepthResponse(
     val maxDepth: Int
 )
 

@@ -1,49 +1,56 @@
-import java.util.*
+import java.time.LocalDateTime
 
 object Samples {
 
     val users = listOf( //size 6
-        User(
-            UUID.randomUUID().toString(),
-            "jhondoe",
-            "Jhon",
+        UserAuth(
+            username = "jhondoe",
+            firstName = "Jhon",
             lastName = "Doe",
-            mail = "jhondoe@gmail.com"
+            mail = "jhondoe@gmail.com",
+            hashPassword = "test".digestMD5(),
+            signupDate = LocalDateTime.now()
         ),
-        User(
-            UUID.randomUUID().toString(),
-            "username1",
-            "firstName1",
+        UserAuth(
+            username = "username1",
+            firstName = "firstName1",
             lastName = "lastName1",
-            mail = "mail@username1.com"
+            mail = "mail@username1.com",
+            hashPassword = "test".digestMD5(),
+            signupDate = LocalDateTime.now()
         ),
-        User(
-            UUID.randomUUID().toString(),
-            "username2",
-            "firstName2",
+        UserAuth(
+            username = "username2",
+            firstName = "firstName2",
             lastName = "lastName2",
-            mail = "mail@username2.com"
+            mail = "mail@username2.com",
+            hashPassword = "test".digestMD5(),
+            signupDate = LocalDateTime.now()
         ),
-        User(
-            UUID.randomUUID().toString(),
-            "username3",
-            "firstName3",
+        UserAuth(
+            username = "username3",
+            firstName = "firstName3",
             lastName = "lastName3",
-            mail = "mail@username3.com"
+            mail = "mail@username3.com",
+            hashPassword = "test".digestMD5(),
+            signupDate = LocalDateTime.now()
         ),
-        User(
-            UUID.randomUUID().toString(),
-            "username4",
-            "firstName4",
+        UserAuth(
+            username = "username4",
+            firstName = "firstName4",
             lastName = "lastName4",
-            mail = "mail@username4.com"
+            mail = "mail@username4.com",
+            hashPassword = "test".digestMD5(),
+            signupDate = LocalDateTime.now()
         ),
-        User(
-            UUID.randomUUID().toString(),
-            "username5",
-            "Jhon",
+        UserAuth(
+            username = "username5",
+            firstName = "Jhon",
             lastName = "lastName5",
-            mail = "mail@username5.com"
+            mail = "mail@username5.com",
+            hashPassword = "test".digestMD5(),
+            signupDate = LocalDateTime.now()
+
         )
     )
 

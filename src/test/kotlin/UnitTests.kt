@@ -5,17 +5,17 @@ class UnitTests {
 
     @Test
     fun getBinaryTreeDepth1() {
-        assertEquals(1, getDepth(Samples.lvl1tree))
+        assertEquals(1, Samples.lvl1tree.getDepth())
     }
 
     @Test
     fun getBinaryTreeDepth2() {
-        assertEquals(2, getDepth(Samples.lvl2tree))
+        assertEquals(2, Samples.lvl2tree.getDepth())
     }
 
     @Test
     fun getBinaryTreeDepth3() {
-        assertEquals(4, getDepth(Samples.lvl4Tree))
+        assertEquals(4, Samples.lvl4Tree.getDepth())
     }
 
 

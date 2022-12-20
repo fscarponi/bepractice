@@ -1,8 +1,6 @@
 import com.mongodb.reactivestreams.client.MongoClient
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
-import org.litote.kmongo.coroutine.CoroutineClient
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.coroutine.coroutine
@@ -56,7 +54,7 @@ object DIModules  {
             }
 
             //direct access to collections --> warning no transaction and collection name is bind!
-            single<CoroutineCollection<User>> {
+            single<CoroutineCollection<UserAuth>> {
                 get<CoroutineDatabase>().getCollection("users")
             }
         }

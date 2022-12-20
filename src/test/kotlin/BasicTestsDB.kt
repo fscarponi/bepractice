@@ -1,6 +1,11 @@
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
+import io.ktor.server.application.*
+import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.cors.routing.*
+import io.ktor.server.routing.*
 import io.ktor.server.testing.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.decodeFromString
@@ -19,7 +24,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class ApplicationTest {
-
 
     @BeforeTest
     fun startDI() {
@@ -43,8 +47,7 @@ class ApplicationTest {
         runBlocking {
             val client = KMongo.createClient().coroutine
             val database = client.getDatabase("testDB")
-            database.getCollection<User>("users").drop()
-            database.getCollection<User>("authUserInfo").drop()
+            database.getCollection<UserAuth>("users").drop()
         }
         println("zzz..zz.. db cleared! ${LocalDateTime.now()}")
     }
@@ -53,9 +56,10 @@ class ApplicationTest {
         val client = KMongo.createClient().coroutine
         val database = client.getDatabase("testDB")
         runBlocking {
-            database.getCollection<User>("users").insertMany(
+            database.getCollection<UserAuth>("users").insertMany(
                 Samples.users
             )
+            println("zzz..zz.. db loaded with samples! ${LocalDateTime.now()}")
         }
     }
 
@@ -129,6 +133,37 @@ class ApplicationTest {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
             setBody(Json.encodeToString(badUser))
         }.let {
+            assertEquals(
+                HttpStatusCode.BadRequest,
+                it.status
+            )
+        }
+    }
+
+    @Test
+    fun testRegistrationCollision() = testApplication {
+        //clear db before test
+        val badUser = UserRegistrationRequest(
+            "username2",//username already in db
+            "password123",
+            "Jhon",
+            "Doe",
+            "mail@username2.com"
+        )
+        application {
+            configureSerialization()
+            setHttp()
+            installRoutes()
+        }
+        loadTestsUserOnDB()
+        client.get("/user/register") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            setBody(Json.encodeToString(badUser))
+        }.let {
+            assertEquals(
+                "User Already Exists!",
+                Json.decodeFromString<TextResponse>(it.bodyAsText()).message
+            )
             assertEquals(
                 HttpStatusCode.BadRequest,
                 it.status
