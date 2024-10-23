@@ -30,11 +30,6 @@ fun Application.module() {
             DIModules.serialization
         )
     }
-    routing {
-        basicApi()
-        dbApi()
-        servicesApi()
-    }
 }
 
 fun Application.configureSerialization() {
